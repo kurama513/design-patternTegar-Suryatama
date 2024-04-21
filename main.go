@@ -1,62 +1,60 @@
-// Observer pattern implementation in Go
-
 package main
 
 import "fmt"
 
-// Observer interface
+// Yang dipilih untuk menerima pesan
 type MessageSubscriber interface {
-  Update(message string)
+	Update(message string)
 }
 
-// Subject struct
+// Mengirim pesan yang terdaftar
 type MessagePublisher struct {
-  subscribers []MessageSubscriber
+	subscribers []MessageSubscriber
 }
 
-// Attach method to add new subscribers
+// Menambah penerima pesan
 func (p *MessagePublisher) Attach(subscriber MessageSubscriber) {
-  p.subscribers = append(p.subscribers, subscriber)
+	p.subscribers = append(p.subscribers, subscriber)
 }
 
-// Notify method to send message to all subscribers
+// mengirimkan pesan kepada semua penerima yang terdaftar.
 func (p *MessagePublisher) Notify(message string) {
-  for _, subscriber := range p.subscribers {
-    subscriber.Update(message)
-  }
+	for _, subscriber := range p.subscribers {
+		subscriber.Update(message)
+	}
 }
 
-// ConcreteObserver struct
+// mewakili penerima pesan melalui email
 type EmailSubscriber struct {
-  email string
+	email string
 }
 
-// Update method for EmailSubscriber
+// metode yang dipanggil ketika EmailSubscriber menerima pesan baru
 func (e *EmailSubscriber) Update(message string) {
-  fmt.Printf("Email to %s: %s\n", e.email, message)
+	fmt.Printf("Email to %s: %s\n", e.email, message)
 }
 
-// ConcreteObserver struct
+// mewakili penerima pesan melalui SMS
 type SMSSubscriber struct {
-  phoneNumber string
+	phoneNumber string
 }
 
-// Update method for SMSSubscriber
+// metode yang dipanggil ketika SMSSubscriber menerima pesan baru
 func (s *SMSSubscriber) Update(message string) {
-  fmt.Printf("SMS to %s: %s\n", s.phoneNumber, message)
+	fmt.Printf("SMS to %s: %s\n", s.phoneNumber, message)
 }
 
 func main() {
-  publisher := &MessagePublisher{}
+	publisher := &MessagePublisher{}
 
-  // Create subscribers
-  emailSubscriber := &EmailSubscriber{email: "example@example.com"}
-  smsSubscriber := &SMSSubscriber{phoneNumber: "+123456789"}
+	// Membuat penerima pesan
+	emailSubscriber := &EmailSubscriber{email: "example@example.com"}
+	smsSubscriber := &SMSSubscriber{phoneNumber: "+123456789"}
 
-  // Attach subscribers to publisher
-  publisher.Attach(emailSubscriber)
-  publisher.Attach(smsSubscriber)
+	// Menambahkan penerima pesan ke penerbit
+	publisher.Attach(emailSubscriber)
+	publisher.Attach(smsSubscriber)
 
-  // Send message
-  publisher.Notify("New message: Hello, World!")
+	// Mengirimkan pesan
+	publisher.Notify("New message: Hello, boy!")
 }
